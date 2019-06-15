@@ -1,7 +1,6 @@
 package sequent.untyped
 
-import sequent.untyped.Parser.Implicits.stringToSym
-import sequent.untyped.Parser.SymWrap
+import sequent.untyped.Implicits.stringToIdx
 
 import scala.annotation.tailrec
 
@@ -9,23 +8,23 @@ object Church {
 
   object Num {
 
-    implicit class RichChurchInt[Sym: SymWrap](a: Int) {
+    implicit class RichChurchInt[I: Idx](a: Int) {
       @tailrec
-      private def count(cnt: Int, num: Lam[Sym]): Lam[Sym] = {
+      private def count(cnt: Int, num: Lam[I]): Lam[I] = {
         if (cnt == a) {
           num
         } else {
           count(cnt + 1, succ(num))
         }
       }
-      def toChurch: Lam[Sym] = {
+      def toChurch: Lam[I] = {
         count(0, _0)
       }
     }
 
-    implicit class RichChurchNum[Sym](numR: Lam[Sym]) {
+    implicit class RichChurchNum[I](numR: Lam[I]) {
       @tailrec
-      private def count(acc: Int, num: Lam[Sym]): Int = {
+      private def count(acc: Int, num: Lam[I]): Int = {
         num match {
           case Abs(_, body) => count(acc + 1, body)
           case _ => acc - 1
@@ -34,20 +33,20 @@ object Church {
       def toInt: Int = count(-1, numR)
     }
 
-    def succ[Sym](num: Lam[Sym])(implicit w: SymWrap[Sym]): Lam[Sym] = {
+    def succ[I](num: Lam[I])(implicit w: Idx[I]): Lam[I] = {
       Abs(w.create("f"), num)
     }
 
-    def _0[Sym: SymWrap]: Lam[Sym] = Abs("f", Abs("x", Var("x")))
-    def _1[Sym: SymWrap]: Lam[Sym] = succ(_0)
-    def _2[Sym: SymWrap]: Lam[Sym] = succ(_1)
-    def _3[Sym: SymWrap]: Lam[Sym] = succ(_2)
-    def _4[Sym: SymWrap]: Lam[Sym] = succ(_3)
-    def _5[Sym: SymWrap]: Lam[Sym] = succ(_4)
-    def _6[Sym: SymWrap]: Lam[Sym] = succ(_5)
-    def _7[Sym: SymWrap]: Lam[Sym] = succ(_6)
-    def _8[Sym: SymWrap]: Lam[Sym] = succ(_7)
-    def _9[Sym: SymWrap]: Lam[Sym] = succ(_8)
+    def _0[I: Idx]: Lam[I] = Abs("f", Abs("x", Var("x")))
+    def _1[I: Idx]: Lam[I] = succ(_0)
+    def _2[I: Idx]: Lam[I] = succ(_1)
+    def _3[I: Idx]: Lam[I] = succ(_2)
+    def _4[I: Idx]: Lam[I] = succ(_3)
+    def _5[I: Idx]: Lam[I] = succ(_4)
+    def _6[I: Idx]: Lam[I] = succ(_5)
+    def _7[I: Idx]: Lam[I] = succ(_6)
+    def _8[I: Idx]: Lam[I] = succ(_7)
+    def _9[I: Idx]: Lam[I] = succ(_8)
   }
 
 }

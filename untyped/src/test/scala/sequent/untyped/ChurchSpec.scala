@@ -5,7 +5,7 @@ import org.scalatest._
 class ChurchSpec extends FlatSpec with Matchers {
 
   import Church.Num._
-  import Parser.Implicits.StringSym
+  import Implicits.StringIdx
 
   def swap[A, B](a: (A, B)): (B, A) = (a._2, a._1)
 

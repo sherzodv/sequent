@@ -4,7 +4,7 @@ import org.scalatest._
 
 class ParserSpec extends FlatSpec with Matchers {
 
-  import Parser.Implicits.StringSym
+  import Implicits.StringIdx
 
   "Parser" must "parse free variable" in {
     Parser.parse("x") shouldBe Right(
