@@ -13,7 +13,7 @@ class ParserSpec extends FlatSpec with Matchers {
   }
 
   "Parser" must "parse abstraction" in {
-    Parser.parse("/x.x") shouldBe Right(
+    Parser.parse("λx.x") shouldBe Right(
       Abs("x", Var("x"))
     )
   }
@@ -25,7 +25,7 @@ class ParserSpec extends FlatSpec with Matchers {
   }
 
   "Parser" must "parse application inside abstraction" in {
-    Parser.parse("/x.x y") shouldBe Right(
+    Parser.parse("λx.x y") shouldBe Right(
       Abs("x", App(Var("x"), Var("y")))
     )
   }
@@ -49,13 +49,25 @@ class ParserSpec extends FlatSpec with Matchers {
   }
 
   "Parser" must "parse parenthesized abstraction application" in {
-    Parser.parse("(/x.x y) z") shouldBe Right(
+    Parser.parse("(λx.x y) z") shouldBe Right(
       App(
         Abs(
           "x",
           App(Var("x"), Var("y"))
         ),
         Var("z")
+      )
+    )
+  }
+
+  "Parser" must "parse abstraction in abstraction" in {
+    Parser.parse("λf.λx.x") shouldBe Right(
+      Abs(
+        "f",
+        Abs(
+          "x",
+          Var("x")
+        )
       )
     )
   }
